@@ -53,9 +53,8 @@ The [config](https://bitbucket.openet.com/projects/AI/repos/issu-test/browse/con
 
 This is an environment descriptor that describes a specific AOC installation. It is an MPDK pipeline. Root ED could be written to deploy upgrade all or parts of AOC. The Root ED contains installation specific parameters and is typically managed in a git repo. Root ED can deploy helm charts, Sub EDs or a combination of both.
 
-** Root ED Contents **
+**Root ED Contents**
 A repository for a Root ED project may contain the following:
-
 - tokensReplacer.yaml
 - env-descriptor.yaml
 - namespaceValues
@@ -117,14 +116,11 @@ metadata:
   name: aoc-5g
 spec:
   releaseVersion: 1.0.0
-
   env:
     type: k8s
     envMode: prod
-
   profiles:
     resourceProfile: development
-
   bulkDeploymentSize: 10
   helmVersion: 3.8.0
   helmTimeout: 360
@@ -135,13 +131,11 @@ spec:
   throwOnConditionKeyMissing : true
   importED:
     envDescriptors:
-
     - name: aoc-ocrt-ed
       configuration:
         uri: com.openet.aoc:ocrt-ed:tar.gz:^AOC_OCRT_ED_VERSION^
         repository: ^TOKEN_ARTIFACTORY_BASEURL^
         repositoryCredId: ^HELM_REPO_CREDENTIAL_ID^
-
     - name: aoc-charging-ed
       configuration:
         uri: com.openet.aoc:charging-ed:tar.gz:^AOC_CHARGING_ED_VERSION^
@@ -152,19 +146,16 @@ spec:
         - name: ^TOKEN_NAMESPACE_CHARGING^
           domains:
           - name: charging-diameter-services
-
     - name: aoc-prov-ed
       configuration:
         uri: com.openet.aoc:provisioning-ed:tar.gz:^AOC_PROV_ED_VERSION^
         repository: ^TOKEN_ARTIFACTORY_BASEURL^
         repositoryCredId: ^HELM_REPO_CREDENTIAL_ID^
-
     - name: aoc-udsf-ed
       configuration:
         uri: com.openet.aoc:udsf-ed:tar.gz:^AOC_UDSF_ED_VERSION^
         repository: ^TOKEN_ARTIFACTORY_BASEURL^
         repositoryCredId: ^HELM_REPO_CREDENTIAL_ID^
-
   namespaces:
   - name: ^TOKEN_NAMESPACE_RSYNCD^
     type: rsyncd
@@ -176,37 +167,31 @@ spec:
         repositoryCredId: ^HELM_REPO_CREDENTIAL_ID^
         type: helm-microservice
         version: ^RSYNCD_VERSION^
-
   - name: ^TOKEN_NAMESPACE_PROVISIONING^
     type: provisioning
     includeNamespaceED:
     - name: aoc-prov-ed
       namespace: ^TOKEN_NAMESPACE_PROVISIONING^
-
   - name: ^TOKEN_NAMESPACE_CHARGING^
     type: charging
     includeNamespaceED:
     - name: aoc-charging-ed
       namespace: ^TOKEN_NAMESPACE_CHARGING^
-
   - name: ^TOKEN_NAMESPACE_OCRT^
     type: ocrt
     includeNamespaceED:
     - name: aoc-ocrt-ed
       namespace: ^TOKEN_NAMESPACE_OCRT^
-
   - name: ^TOKEN_NAMESPACE_CHF_UDSF^
     type: udsf-chf
     includeNamespaceED:
     - name: aoc-udsf-ed
       namespace: ^TOKEN_NAMESPACE_CHF_UDSF^
-
   preDeployment:
     namespaces:
       alreadyCreated: false
       resourceQuata: {}
     stepsConfig:
-
     - name: workspaceCustomStep
       executionStage: prepare values
       desc: prepare values file
@@ -218,49 +203,38 @@ spec:
           script: "vars/credentialAsValues.groovy"
       runConditions:
       - ed.spec.env.installType: ["install"]
-
 ## create namespace
     - name: createNamespace
       executionStage: Create Namespace
       throwOnFailure: true
       stepParams: {}
       scmSkip: true
-
 ## deploy rsyncd
     - name: genericDeploymentStep
       executionStage: Deploy Rsyncd
       throwOnFailure: true
       stepParams:
         releaseName: rsyncd
-
 ## Main Deployment steps executed between pre & postDeployment
-
   postDeployment:
     notification:
       dl: nonexist@nomail.com
     stepsConfig:
-
     - name: deployEnvDesc
       stepParams: {}
-
     - name: reportAndNotify
       stepParams: {}
-
 ```
-
 
 # Values and Profiles:
 
-A Root ED will almost always require some values overrides 
-
+Root ED will almost always require some values overrides. 
 See the following section of MPDK documentaion for further information
-
 https://msnext-master.corp.amdocs.com/pub/doc/platform/ms360-platform/ms360-platform-1.41.0/deployment/05-basic-concepts/15-env-descriptor.html#using-namespace-level-values
 
 ## namespaceValues file structure convention
 
 The values folder contains all the environment specific configuration that is needed to condition the environment. These are the same values files that would typically be used when running a helm install or upgrade command.
-
 Technically, our environment is a set of helm charts. But from a business context, these helm charts can be categorized as products and/or domains within those products. The example folder structure shown below highlights that aspect. We can segregate our values files for the respective helm charts according to their respective product and domain affinity.
 If there is no such affinity then those values files can go into the chart folder. The same helm chart might be used in different helm releases for which we can have individual release folders.
 Once the segregation logic as per above is done, the `convention over configuration` feature of MPDK kicks in which applies the respective values files as per the structure defined below.
