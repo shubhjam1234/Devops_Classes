@@ -109,6 +109,7 @@ The following `env-descriptor.yaml` snippet demonstrates
 * creates namespaces (dependent on runCondition)
 * calls post deployment Jenkins groovy to run tests
 
+**Sample env-descriptor.yaml**
 ```
 apiVersion: descriptors.amdocs.com/v1beta1
 kind: Environment
