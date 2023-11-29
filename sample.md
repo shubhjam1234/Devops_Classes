@@ -320,19 +320,18 @@ Customer does have their own root-ed.
 
 
 ### MR Upgrade:  
-For MR Upgrade, Need to Update Sub ED versions.
-
-```
-tokens:
-  TOKEN_ENV_NAME: ${ENV_NAME}
-
-  # Tokens related to Chart Versions
-  RSYNCD_VERSION: 2.10.0
-
-  # Tokens related to imported Sub-ed Versions 
-  AOC_PROV_ED_VERSION: 1.0.0-SNAPSHOT  <<<<
-  AOC_OCRT_ED_VERSION: 1.0.0-SNAPSHOT  <<<<
-  AOC_UDSF_ED_VERSION: 1.0.0-SNAPSHOT  <<<<
-  AOC_CHARGING_ED_VERSION: 1.0.0-SNAPSHOT <<<<
-```
-
+- For MR Upgrade, Need to Update Sub ED versions in `tokenReplacer.yaml` file.
+     ```
+     tokens:
+       TOKEN_ENV_NAME: ${ENV_NAME}
+     
+       # Tokens related to Chart Versions
+       RSYNCD_VERSION: 2.10.0
+     
+       # Tokens related to imported Sub-ed Versions 
+       AOC_PROV_ED_VERSION: 1.0.0-SNAPSHOT  <<<<
+       AOC_OCRT_ED_VERSION: 1.0.0-SNAPSHOT  <<<<
+       AOC_UDSF_ED_VERSION: 1.0.0-SNAPSHOT  <<<<
+       AOC_CHARGING_ED_VERSION: 1.0.0-SNAPSHOT <<<<
+     ```
+- Trigger the Jenkins Root ED Job. 
