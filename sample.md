@@ -53,7 +53,8 @@ The [config](https://bitbucket.openet.com/projects/AI/repos/issu-test/browse/con
 
 This is an environment descriptor that describes a specific AOC installation. It is an MPDK pipeline. Root ED could be written to deploy upgrade all or parts of AOC. The Root ED contains installation specific parameters and is typically managed in a git repo. Root ED can deploy helm charts, Sub EDs or a combination of both.
 
-**Root ED Contents**
+**Root ED Contents:**
+
 A repository for a Root ED project may contain the following:
 - tokensReplacer.yaml
 - env-descriptor.yaml
@@ -62,14 +63,14 @@ A repository for a Root ED project may contain the following:
 - scripts
 - jenkins/Jenkinsfile.groovy that call Jenkins Deployment Module.
 
-#  Token Replacer:
+##  Token Replacer:
 
 See the following section of MPDK documentaion further information on Token Replacer: 
 
 https://msnext-master.corp.amdocs.com/pub/doc/platform/ms360-platform/ms360-platform-1.41.0/deployment/30-tools/35-token-replacer.html
 
 
-## Sample TokensReplacer.yaml 
+### Sample TokensReplacer.yaml 
 
 The following snippet is from a Root ED to deploy AOC
 
@@ -109,7 +110,7 @@ The following `env-descriptor.yaml` snippet demonstrates
 * creates namespaces (dependent on runCondition)
 * calls post deployment Jenkins groovy to run tests
 
-**Sample env-descriptor.yaml**
+### Sample env-descriptor.yaml
 ```
 apiVersion: descriptors.amdocs.com/v1beta1
 kind: Environment
@@ -264,7 +265,6 @@ For more info on this feature kindly refer to: [MPDK Deploy convention-over-conf
 Profiles are the feature that allow you to use a custom set of values in MPDK deploy. Applying custom values files to domains/charts during installation. 
 To use profiles you must set the `conventionOverConfiguration` property to `true` . You must add a `profiles` section to your environment descriptor file and provide the `key:value` parameters that you want to use in your profile.  
 
-### Profiles
 Create a subfolder named profileValues in your environment folder. Then create a profile key value within that folder. For options under that profile then add another key value folder. 
 
 ```
@@ -316,8 +316,7 @@ spec:
 # Upgrade activity
 
 ### Pre-Requisites :
-Customer does have their own root-ed. 
-
+Customer does have their own Root ED. If they don't have then they need to be create Root ED repo. 
 
 ### MR Upgrade:  
 - For MR Upgrade, Need to Update Sub ED versions in `tokenReplacer.yaml` file.
